@@ -97,8 +97,11 @@ def readMcpatFile(templateFile):
     #ET.dump(templateMcpat)
 
 def prepareTemplate(outputFile):
-    numCores = len(config["system"]["cpu"])
-    privateL2 = config["system"]["cpu"][0].has_key('l2cache')
+    numCores = 1
+    print("-------------------------------------------------")
+    print(numCores)
+    privateL2 = 0
+    #privateL2 = config["system"]["cpu"][0].has_key('l2cache')
     sharedL2 = config["system"].has_key('l2')
     if privateL2:
         numL2 = numCores
@@ -142,10 +145,13 @@ def prepareTemplate(outputFile):
                     childValue = coreChild.attrib.get("value")
                     childName = coreChild.attrib.get("name")
                     if isinstance(childName, basestring) and childName == "x86":
+                        '''
                         if config["system"]["cpu"][coreCounter]["isa"][0]["type"] == "X86ISA":
                             childValue = "1"
                         else:
                             childValue = "0"
+                        '''
+                        childValue = "0"
                     if isinstance(childId, basestring) and "core" in childId:
                         childId = childId.replace("core", "core" + str(coreCounter))
                     if isinstance(childValue, basestring) and "cpu." in childValue and "stats" in childValue.split('.')[0]:
@@ -216,6 +222,7 @@ def getConfValue(confStr):
     currHierarchy = ""
     for x in spltConf:
         currHierarchy += x
+        print(x)
         if x.isdigit():
             currConf = currConf[int(x)] 
         elif x in currConf:
@@ -247,12 +254,26 @@ def dumpMcpatOut(outFile):
     #replace params with values from the GEM5 config file 
     for param in rootElem.iter('param'):
         name = param.attrib['name']
+        print("name:"+name)
         value = param.attrib['value']
+        print("value:"+value)
+        print(type(value))
+        if "system.cpu.0" in value:
+            value = value.replace(".0","")
         if 'config' in value:
             allConfs = configMatch.findall(value)
             for conf in allConfs:
+                print("conf:"+conf)
                 confValue = getConfValue(conf)
+                print("type:"+str(type(confValue)))
+                print(confValue)
+                if isinstance(confValue, list):
+                    print(confValue)
+                    print(eval(confValue)[0])
+                    confValue = confValue[0]
+                    
                 value = re.sub("config."+ conf, str(confValue), value)
+                print("value:"+value)
             if "," in value:
                 exprs = re.split(',', value)
                 for i in range(len(exprs)):
@@ -262,7 +283,7 @@ def dumpMcpatOut(outFile):
                 param.attrib['value'] = str(eval(str(value)))
 
     #replace stats with values from the GEM5 stats file 
-    statRe = re.compile(r'stats\.([a-zA-Z0-9_:\.]+)')
+    statRe = re.compile(r'stats\.([a-zA-Z 0-9_:\.]+)')
     for stat in rootElem.iter('stat'):
         name = stat.attrib['name']
         value = stat.attrib['value']
