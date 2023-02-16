@@ -128,9 +128,12 @@ def prepareTemplate(outputFile):
 
         # to consider all the cpus in total cycle calculation
         if isinstance(temp, basestring) and "cpu." in temp and temp.split('.')[0] == "stats":
-            value = "(" + temp.replace("cpu.", "cpu0.") + ")"
+            # value = "(" + temp.replace("cpu.", "cpu0.") + ")"
+            value = "(" + temp.replace("cpu.", "cpu.") + ")"
             for i in range(1, numCores):
-                value = value + " + (" + temp.replace("cpu.", "cpu"+str(i)+".") +")"
+                # value = value + " + (" + temp.replace("cpu.", "cpu"+str(i)+".") +")"
+                value = value + " + (" + temp.replace("cpu.", "cpu.") +")"
+
             child.attrib['value'] = value
 
         # remove a core template element and replace it with number of cores template elements
@@ -155,16 +158,20 @@ def prepareTemplate(outputFile):
                     if isinstance(childId, basestring) and "core" in childId:
                         childId = childId.replace("core", "core" + str(coreCounter))
                     if isinstance(childValue, basestring) and "cpu." in childValue and "stats" in childValue.split('.')[0]:
-                        childValue = childValue.replace("cpu." , "cpu" + str(coreCounter)+ ".")
+                        # childValue = childValue.replace("cpu." , "cpu" + str(coreCounter)+ ".")
+                        childValue = childValue.replace("cpu." , "cpu.")
                     if isinstance(childValue, basestring) and "cpu." in childValue and "config" in childValue.split('.')[0]:
-                        childValue = childValue.replace("cpu." , "cpu." + str(coreCounter)+ ".")
+                        # childValue = childValue.replace("cpu." , "cpu." + str(coreCounter)+ ".")
+                        childValue = childValue.replace("cpu." , "cpu.")
                     if len(list(coreChild)) is not 0:
                         for level2Child in coreChild:
                             level2ChildValue = level2Child.attrib.get("value")
                             if isinstance(level2ChildValue, basestring) and "cpu." in level2ChildValue and "stats" in level2ChildValue.split('.')[0]:
-                                level2ChildValue = level2ChildValue.replace("cpu." , "cpu" + str(coreCounter)+ ".")
+                                # level2ChildValue = level2ChildValue.replace("cpu." , "cpu" + str(coreCounter)+ ".")
+                                level2ChildValue = level2ChildValue.replace("cpu." , "cpu.")
                             if isinstance(level2ChildValue, basestring) and "cpu." in level2ChildValue and "config" in level2ChildValue.split('.')[0]:
-                                level2ChildValue = level2ChildValue.replace("cpu." , "cpu." + str(coreCounter)+ ".")
+                                # level2ChildValue = level2ChildValue.replace("cpu." , "cpu." + str(coreCounter)+ ".")
+                                level2ChildValue = level2ChildValue.replace("cpu." , "cpu.")
                             level2Child.attrib["value"] = level2ChildValue
                     if isinstance(childId, basestring):
                         coreChild.attrib["id"] = childId
@@ -222,7 +229,6 @@ def getConfValue(confStr):
     currHierarchy = ""
     for x in spltConf:
         currHierarchy += x
-        print(x)
         if x.isdigit():
             currConf = currConf[int(x)] 
         elif x in currConf:
@@ -254,26 +260,17 @@ def dumpMcpatOut(outFile):
     #replace params with values from the GEM5 config file 
     for param in rootElem.iter('param'):
         name = param.attrib['name']
-        print("name:"+name)
         value = param.attrib['value']
-        print("value:"+value)
-        print(type(value))
         if "system.cpu.0" in value:
             value = value.replace(".0","")
         if 'config' in value:
             allConfs = configMatch.findall(value)
             for conf in allConfs:
-                print("conf:"+conf)
                 confValue = getConfValue(conf)
-                print("type:"+str(type(confValue)))
-                print(confValue)
                 if isinstance(confValue, list):
-                    print(confValue)
-                    print(eval(confValue)[0])
                     confValue = confValue[0]
                     
                 value = re.sub("config."+ conf, str(confValue), value)
-                print("value:"+value)
             if "," in value:
                 exprs = re.split(',', value)
                 for i in range(len(exprs)):
@@ -283,7 +280,7 @@ def dumpMcpatOut(outFile):
                 param.attrib['value'] = str(eval(str(value)))
 
     #replace stats with values from the GEM5 stats file 
-    statRe = re.compile(r'stats\.([a-zA-Z 0-9_:\.]+)')
+    statRe = re.compile(r'stats\.([a-zA-Z0-9_:\.]+)')
     for stat in rootElem.iter('stat'):
         name = stat.attrib['name']
         value = stat.attrib['value']
