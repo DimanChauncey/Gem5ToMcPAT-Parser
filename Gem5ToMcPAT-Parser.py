@@ -100,8 +100,7 @@ def prepareTemplate(outputFile):
     numCores = 1
     print("-------------------------------------------------")
     print(numCores)
-    privateL2 = 0
-    #privateL2 = config["system"]["cpu"][0].has_key('l2cache')
+    privateL2 = config["system"].has_key('l2cache')
     sharedL2 = config["system"].has_key('l2')
     if privateL2:
         numL2 = numCores

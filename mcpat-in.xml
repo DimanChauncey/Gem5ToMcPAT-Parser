@@ -4,7 +4,7 @@
     <param name="number_of_cores" value="1" />
     <param name="number_of_L1Directories" value="0" />
     <param name="number_of_L2Directories" value="0" />
-    <param name="number_of_L2s" value="0" />
+    <param name="number_of_L2s" value="1" />
     <!-- This number means how many L2 clusters in each cluster there can be multiple banks/ports -->
     <param name="Private_L2" value="1" />
     <!--1 Private, 0 shared/coherent -->
@@ -20,7 +20,7 @@
     <param name="homogeneous_ccs" value="0" />
     <!--cache coherence hardware -->
     <param name="homogeneous_NoCs" value="0" />
-    <param name="core_tech_node" value="65" />
+    <param name="core_tech_node" value="22" />
     <!-- nm -->
     <param name="target_core_clockrate" value="2000.0" />
     <!--MHz -->
