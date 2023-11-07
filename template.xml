@@ -265,7 +265,7 @@
         <param name="buffer_sizes" value="config.system.cpu.dcache.mshrs,config.system.cpu.dcache.mshrs,config.system.cpu.dcache.mshrs,config.system.cpu.dcache.mshrs"/>
         <!-- cache controller buffer sizes: miss_buffer_size(MSHR),fill_buffer_size,prefetch_buffer_size,wb_buffer_size-->
         <stat name="read_accesses" value="stats.system.cpu.dcache.ReadReq.accesses::total"/>
-        <stat name="write_accesses" value="system.cpu.dcache.WriteReq.accesses::total"/>
+        <stat name="write_accesses" value="stats.cpu.dcache.WriteReq.accesses::total"/>
         <stat name="read_misses" value="stats.system.cpu.dcache.ReadReq.misses::total"/>
         <stat name="write_misses" value="stats.system.cpu.dcache.WriteReq.misses::total"/>
         <stat name="conflicts" value="stats.system.cpu.dcache.replacements"/>
