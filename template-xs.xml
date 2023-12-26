@@ -21,7 +21,7 @@
     <param name="homogeneous_ccs" value="0"/>
     <!--cache coherence hardware -->
     <param name="homogeneous_NoCs" value="0"/>
-    <param name="core_tech_node" value="22"/>
+    <param name="core_tech_node" value="7"/>
     <!-- nm -->
     <param name="target_core_clockrate" value="1e-6/config.system.clk_domain.clock.0*1e12"/>
     <!--MHz -->
