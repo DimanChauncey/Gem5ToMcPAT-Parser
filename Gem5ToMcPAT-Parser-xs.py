@@ -52,12 +52,14 @@ def readStatsFile(statsFile):
         #ignore empty lines and lines starting with "---"
         if not ignores.match(line):
             count += 1
-            statKind = statLine.match(line).group(1)
-            statValue = statLine.match(line).group(2)
-            if statValue == 'nan':
-                print("\tWarning (stats): %s is nan. Setting it to 0" % statKind)
-                statValue = '0'
-            stats[statKind] = statValue
+            matched = statLine.match(line)
+            if matched:
+                statKind = statLine.match(line).group(1)
+                statValue = statLine.match(line).group(2)
+                if statValue == 'nan':
+                    print("\tWarning (stats): %s is nan. Setting it to 0" % statKind)
+                    statValue = '0'
+                stats[statKind] = statValue
     F.close()
 
 def readConfigFile(configFile):
